@@ -7,17 +7,30 @@ export const sampleProducts = [
   { id: 2, name: 'Milk', price: '$2.50', category: 'Dairy', inStock: false }
 ]
 
-const ProductList = () => {
+const ProductList = ({ selectedCategory = 'all', onAddToCart }) => {
+  // Show everything for "all", otherwise only products in the chosen category.
+  const visibleProducts = sampleProducts.filter(
+    (product) =>
+      selectedCategory === 'all' || product.category === selectedCategory
+  )
+
   return (
     <div>
       <h2>Available Products</h2>
 
-      {/* TODO: Filter sample data using selected category */}
-      {sampleProducts.map((product) => (
-        <ProductCard key={product.id} product={product} />
-      ))}
+      {/* If nothing matches the filter, tell the user instead of showing a blank list */}
+      {visibleProducts.length === 0 ? (
+        <p>No products available</p>
+      ) : (
+        visibleProducts.map((product) => (
+          <ProductCard
+            key={product.id}
+            product={product}
+            onAddToCart={onAddToCart}
+          />
+        ))
+      )}
     </div>
   )
 }
-
 export default ProductList
