@@ -4,33 +4,51 @@ import DarkModeToggle from './components/DarkModeToggle'
 import Cart from './components/Cart'
 
 const App = () => {
-  // TODO: Implement state for dark mode toggle
+  // Dark mode: false = light, true = dark.
+  const [darkMode, setDarkMode] = useState(false)
 
-  // TODO: Implement state for cart management
+  // Cart: a list of the products the user has added.
+  const [cartItems, setCartItems] = useState([])
 
-  // TODO: Implement state for category filtering
+  // Category filter: "all" shows every product.
+  const [selectedCategory, setSelectedCategory] = useState('all')
+
+  function handleToggleDarkMode() {
+    setDarkMode((current) => !current)
+  }
+
+  function handleAddToCart(product) {
+    setCartItems((current) => [...current, product])
+  }
+
+  function handleCategoryChange(event) {
+    setSelectedCategory(event.target.value)
+  }
+
+  // Simple theme colours (optional styling).
+  const themeStyle = darkMode
+    ? { backgroundColor: '#222', color: '#fff', minHeight: '100vh' }
+    : { backgroundColor: '#fff', color: '#000', minHeight: '100vh' }
 
   return (
-    <div>
+    <div style={themeStyle}>
       <h1>🛒 Shopping App</h1>
-      <p>
-        Welcome! Your task is to implement filtering, cart management, and dark
-        mode.
-      </p>
 
-      {/* TODO: Render DarkModeToggle and implement dark mode functionality */}
+      <DarkModeToggle darkMode={darkMode} onToggle={handleToggleDarkMode} />
 
-      {/* TODO: Implement category filter dropdown */}
       <label>Filter by Category: </label>
-      <select>
+      <select value={selectedCategory} onChange={handleCategoryChange}>
         <option value="all">All</option>
         <option value="Fruits">Fruits</option>
         <option value="Dairy">Dairy</option>
       </select>
 
-      <ProductList />
+      <ProductList
+        selectedCategory={selectedCategory}
+        onAddToCart={handleAddToCart}
+      />
 
-      {/* TODO: Implement and render Cart component */}
+      <Cart cartItems={cartItems} />
     </div>
   )
 }
